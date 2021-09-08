@@ -14,10 +14,17 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from tunes import views
+from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
+from core import views
 
+app_name = 'core'
 urlpatterns = [
     path('adminsite/', admin.site.urls),
     path('', views.home, name='home'),
+    path('tunes/', include('tunes.urls', namespace='tunes')),
 ]
+
+# Folder for Local Media Files
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

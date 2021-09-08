@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<h1>Tune List</h1>
+
+<table>
+    <tr>
+      <th>Tune</th>
+      <th>Type</th>
+    </tr>
+    {% for tune in tunes %}
+    <tr>
+      <td><a href="{{tune.get_absolute_url}}">{{ tune.name }}</a></td>
+      <td>{{ tune.tune_type }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+
+{% endblock %}

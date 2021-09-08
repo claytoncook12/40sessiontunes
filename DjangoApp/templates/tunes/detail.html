@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- ABC Javascript -->
+<script src="{% static 'tunes/js/abcjs-basic-min.js' %}" type="text/javascript"></script>
+
+<h1 style="display:inline;">{{ tune.name }} <h2 style="display:inline;">{{ tune.tune_type }}</h2></h1> 
+<hr>
+<h3>ABC Notation</h3>
+
+{% if abc_list %}
+    {% for abc in abc_list %}
+        Key: {{ abc.key }}
+        <!-- generating abc notes-->
+        <div id="paper"></div>
+        <script type="text/javascript">
+            var abc = `{{ abc.text|safe }}`;
+            var visualOptions = { responsive: 'resize' };
+            ABCJS.renderAbc("paper", abc);  //visualOptions);
+        </script>
+        <br>
+        <h4>Plain ABC notation</h4>
+        <p style="white-space: pre-wrap;">{{ abc.text|safe }}</p>
+        <br>
+    {% endfor %}
+{% else %}
+    <p>No abc for tune.</p>
+{% endif %}
+{% endblock %}

@@ -1,6 +1,26 @@
 from django.shortcuts import render
+from django.shortcuts import get_object_or_404
+from .models import Tune, ABCText
 
 # Create your views here.
-def home(request):
+def list(request):
 
-    return render(request, 'home.html')
+    qs = Tune.objects.all()
+
+    context = {
+        "tunes" : qs
+    }
+
+    return render(request, 'tunes/list.html', context)
+
+def detail(request, id):
+
+    tune = get_object_or_404(Tune, pk=id)
+    abc_qs = ABCText.objects.filter(tune=tune)
+
+    context = {
+        "tune": tune,
+        "abc_list": abc_qs,
+    }
+
+    return render(request, 'tunes/detail.html', context)

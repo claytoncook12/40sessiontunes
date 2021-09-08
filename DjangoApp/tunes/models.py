@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 class TuneType(models.Model):
     tune_type_char = models.CharField('Tune Type', max_length=50, unique=True)
@@ -28,6 +29,9 @@ class Tune(models.Model):
 
     def __str__(self):
         return  f'{self.name} ({self.tune_type.tune_type_char})'
+    
+    def get_absolute_url(self):
+        return reverse('tunes:detail', kwargs={"id": self.id})
    
 class ABCText(models.Model):
     tune = models.ForeignKey(Tune, on_delete=models.CASCADE, verbose_name="Tune")
