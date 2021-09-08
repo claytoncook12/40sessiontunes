@@ -1,0 +1,7 @@
+Django>=3.0,<4.0
+psycopg2-binary>=2.8
+python-decouple
+whitenoise
+gunicorn
+factory-boy
+pytest-django
