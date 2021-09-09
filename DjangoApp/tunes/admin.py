@@ -1,6 +1,6 @@
 from django.contrib import admin
-from .models import TuneType, Key, Tune, Composer, ABCTune
-from .models import ABCTunePiece
+from .models import TuneType, Key, Tune, Composer, Meter
+from .models import ABCTune, ABCTunePiece
 
 # Register your models here.
 @admin.register(TuneType)
@@ -14,6 +14,10 @@ class KeyAdmin(admin.ModelAdmin):
     ordering = ("key_type_char",)
     list_filter = ("key_type_char",)
     list_display = ("key_type_char",)
+
+@admin.register(Meter)
+class MeterAdmin(admin.ModelAdmin):
+    ordering = ('meter_type_char',)
 
 @admin.register(Tune)
 class TuneAdmin(admin.ModelAdmin):
