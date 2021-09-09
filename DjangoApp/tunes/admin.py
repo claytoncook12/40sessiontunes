@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import TuneType, Key, Tune, Composer, ABCText
+from .models import TuneType, Key, Tune, Composer, ABCTune
+from .models import ABCTunePiece
 
 # Register your models here.
 @admin.register(TuneType)
@@ -25,7 +26,17 @@ class TuneAdmin(admin.ModelAdmin):
 class ComposerAdmin(admin.ModelAdmin):
     ordering = ("name",)
 
-@admin.register(ABCText)
+@admin.register(ABCTunePiece)
+class ABCTunePieceAdmin(admin.ModelAdmin):
+    ordering = ("tune","part_order")
+
+class ABCTunePieceInline(admin.TabularInline):
+    model = ABCTunePiece
+    extra = 1
+    show_change_link = True
+
+@admin.register(ABCTune)
 class ABCTextAdmin(admin.ModelAdmin):
     ordering = ("tune",)
     list_filter = ("key",)
+    inlines = [ABCTunePieceInline]

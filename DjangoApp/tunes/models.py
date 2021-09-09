@@ -33,10 +33,17 @@ class Tune(models.Model):
     def get_absolute_url(self):
         return reverse('tunes:detail', kwargs={"id": self.id})
    
-class ABCText(models.Model):
+class ABCTune(models.Model):
     tune = models.ForeignKey(Tune, on_delete=models.CASCADE, verbose_name="Tune")
     key = models.ForeignKey(Key, on_delete=models.CASCADE, verbose_name="Key of Tune")
-    text = models.TextField('Abc Text', null=True, blank=True)
 
     def __str__(self):
         return f'{self.tune} ({self.key})'
+
+class ABCTunePiece(models.Model):
+    tune = models.ForeignKey(ABCTune, on_delete=models.CASCADE, verbose_name="ABC Tune")
+    part_order = models.IntegerField('Part Number', default=1)
+    part_title = models.CharField('Title of Part', max_length=30,
+        default="Part #", null=True, blank=True)
+    default = models.BooleanField('Default Part?', default=True)
+    abc_piece = models.TextField('ABC text for part of Tune')
