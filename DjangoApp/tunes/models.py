@@ -25,6 +25,12 @@ class Composer(models.Model):
     def __str__(self):
         return self.name
 
+class UnitNoteLength(models.Model):
+    unit_note_length = models.CharField('Unit Note Length', max_length=50)
+
+    def __str__(self):
+        return self.unit_note_length
+
 class Tune(models.Model):
     name = models.CharField('Tune Name', max_length=300)
     tune_type = models.ForeignKey(TuneType, on_delete=models.CASCADE, verbose_name="Tune Type")
