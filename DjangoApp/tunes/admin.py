@@ -36,11 +36,11 @@ class ComposerAdmin(admin.ModelAdmin):
 
 @admin.register(ABCTunePiece)
 class ABCTunePieceAdmin(admin.ModelAdmin):
-    ordering = ("tune","part_order")
+    ordering = ("abc_tune","part_order")
 
 class ABCTunePieceInline(admin.TabularInline):
     model = ABCTunePiece
-    extra = 1
+    extra = 0
     show_change_link = True
 
 @admin.register(ABCTune)

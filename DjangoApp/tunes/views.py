@@ -25,8 +25,6 @@ def detail(request, id):
         "abc_list": abc_qs,
     }
 
-    breakpoint()
-
     return render(request, 'tunes/detail.html', context)
 
 def abc(request, id):
