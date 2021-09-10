@@ -15,259 +15,52 @@
     {% for abc in abc_list %}
         Key: {{ abc.key }}
         <!-- divs for abc paper and audio -->
-        <button class="next">Next Tune</button>
-        <button class="start">Start/Pause</button>
-        <button class="warp">Rand. Warp</button>
-        <button class="seek">Seek to Middle</button>
-          <button class="download" style="display: none;">Download</button>
-          <div class="seek-controls disabled">
-              <label>Seek: <input type="number" min="0" id="seek-amount"></label>
-              <select aria-label="seek units" id="seek-units">
-                  <option value="percent">Percent</option>
-                  <option value="seconds">Seconds</option>
-                  <option value="beats">Beats</option>
-              </select>
-              <button class="seek2">Seek</button>
-              <span id="unit-explanation" class="click-explanation">First start playing to load audio before seeking.</span>
-          </div>
-        <div class="midi">MIDI</div>
         <div id="paper"></div>
         <div id="audio"></div>
-        <p class="beat"></p>
-        <p class="click-explanation" style="display:none;">Click on a note to play that note.</p>
-        <pre class="clicked-info"></pre>
-        <pre class="feedback"></pre>
-        <!-- Scripts to generate abc notes -->
-        <!--
+        <!-- Scripts for making notes and audio -->
         <script type="text/javascript">
+            // given that there are two elements in the DOM with the IDs "paper" and "audio"
+            var cursorControl = {}; // see section on CursorControl
             var abc = `{{ abc.abc_full_default|safe }}`;
-            var visualOptions = { responsive: 'resize' };
-            ABCJS.renderAbc("paper", abc);  //visualOptions);
-        </script>
-        -->
-        <!-- Scripts for generating midi player and curser -->
-        <script type="text/javascript">
-            function CursorControl() {
-			var self = this;
+            var abcOptions = { add_classes: true };
+            var audioParams = {
+                chordsOff: true,
+                program: 41,
+                qpm: 110, //TODO Need to set default BPM somewhere in audio parameters
+            };
 
-			self.onReady = function() {
-				var downloadLink = document.querySelector(".download");
-				downloadLink.addEventListener("click", download);
-				downloadLink.setAttribute("style", "");
-				var clickEl = document.querySelector(".click-explanation")
-				clickEl.setAttribute("style", "");
-			};
-			self.onStart = function() {
-				var svg = document.querySelector("#paper svg");
-				var cursor = document.createElementNS("http://www.w3.org/2000/svg", "line");
-				cursor.setAttribute("class", "abcjs-cursor");
-				cursor.setAttributeNS(null, 'x1', 0);
-				cursor.setAttributeNS(null, 'y1', 0);
-				cursor.setAttributeNS(null, 'x2', 0);
-				cursor.setAttributeNS(null, 'y2', 0);
-				svg.appendChild(cursor);
+            if (ABCJS.synth.supportsAudio()) {
+                var synthControl = new ABCJS.synth.SynthController();
+                synthControl.load("#audio", 
+                    cursorControl, 
+                    {
+                        displayLoop: true, 
+                        displayRestart: true, 
+                        displayPlay: true, 
+                        displayProgress: true, 
+                        displayWarp: true
+                    }
+                );
 
-			};
-			self.beatSubdivisions = 2;
-			self.onBeat = function(beatNumber, totalBeats, totalTime) {
-				if (!self.beatDiv)
-					self.beatDiv = document.querySelector(".beat");
-				self.beatDiv.innerText = "Beat: " + beatNumber + " Total: " + totalBeats + " Total time: " + totalTime;
-			};
-			self.onEvent = function(ev) {
-				if (ev.measureStart && ev.left === null)
-					return; // this was the second part of a tie across a measure line. Just ignore it.
-
-				var lastSelection = document.querySelectorAll("#paper svg .highlight");
-				for (var k = 0; k < lastSelection.length; k++)
-					lastSelection[k].classList.remove("highlight");
-
-				var el = document.querySelector(".feedback").innerHTML = "<div class='label'>Current Note:</div>" + JSON.stringify(ev, null, 4);
-				for (var i = 0; i < ev.elements.length; i++ ) {
-					var note = ev.elements[i];
-					for (var j = 0; j < note.length; j++) {
-						note[j].classList.add("highlight");
-					}
-				}
-
-				var cursor = document.querySelector("#paper svg .abcjs-cursor");
-				if (cursor) {
-					cursor.setAttribute("x1", ev.left - 2);
-					cursor.setAttribute("x2", ev.left - 2);
-					cursor.setAttribute("y1", ev.top);
-					cursor.setAttribute("y2", ev.top + ev.height);
-				}
-			};
-			self.onFinished = function() {
-				var els = document.querySelectorAll("svg .highlight");
-				for (var i = 0; i < els.length; i++ ) {
-					els[i].classList.remove("highlight");
-				}
-				var cursor = document.querySelector("#paper svg .abcjs-cursor");
-				if (cursor) {
-					cursor.setAttribute("x1", 0);
-					cursor.setAttribute("x2", 0);
-					cursor.setAttribute("y1", 0);
-					cursor.setAttribute("y2", 0);
-				}
-			};
-		}
-
-        var cursorControl = new CursorControl();
-
-        var abc = [`{{ abc.abc_full_default|safe }}`];
-
-        var audioParams = { chordsOff: true };
-
-        var tuneNames = ["{{ abc.tune.name }} "];
-
-		var currentTune = 0;
-
-		var synthControl;
-
-        function clickListener(abcElem, tuneNumber, classes, analysis, drag, mouseEvent) {
-			var output = "currentTrackMilliseconds: " + abcElem.currentTrackMilliseconds + "<br>" +
-				"currentTrackWholeNotes: " + abcElem.currentTrackWholeNotes + "<br>" +
-				"midiPitches: " + JSON.stringify(abcElem.midiPitches, null, 4) + "<br>" +
-				"gracenotes: " + JSON.stringify(abcElem.gracenotes, null, 4) + "<br>" +
-				"midiGraceNotePitches: " + JSON.stringify(abcElem.midiGraceNotePitches, null, 4) + "<br>";
-			document.querySelector(".clicked-info").innerHTML = "<div class='label'>Clicked info:</div>" +output;
-
-			var lastClicked = abcElem.midiPitches;
-			if (!lastClicked)
-				return;
-
-			ABCJS.synth.playEvent(lastClicked, abcElem.midiGraceNotePitches, synthControl.visualObj.millisecondsPerMeasure()).then(function (response) {
-				console.log("note played");
-			}).catch(function (error) {
-				console.log("error playing note", error);
-			});
-		}
-
-        var abcOptions = {
-			add_classes: true,
-			clickListener: self.clickListener,
-			responsive: "resize"
-		};
-
-        function load() {
-			document.querySelector(".next").addEventListener("click", next);
-			document.querySelector(".start").addEventListener("click", start);
-			document.querySelector(".warp").addEventListener("click", warp);
-			document.querySelector(".seek").addEventListener("click", seek);
-			document.querySelector(".seek2").addEventListener("click", seek2);
-			document.querySelector("#seek-units").addEventListener("change", seekExplanation);
-
-			if (ABCJS.synth.supportsAudio()) {
-				synthControl = new ABCJS.synth.SynthController();
-				synthControl.load("#audio", cursorControl, {displayLoop: true, displayRestart: true, displayPlay: true, displayProgress: true, displayWarp: true});
-			} else {
-				document.querySelector("#audio").innerHTML = "<div class='audio-error'>Audio is not supported in this browser.</div>";
-			}
-			setTune(false, audioParams);
-		}
-
-        
-		function download() {
-			if (synthControl)
-				synthControl.download(tuneNames[currentTune] + ".wav");
-		}
-
-		function start() {
-			if (synthControl)
-				synthControl.play();
-		}
-
-		function seek() {
-			synthControl.seek(0.50)
-		}
-
-		function seekExplanation() {
-			var explanation = document.getElementById("unit-explanation");
-			if (!synthControl.visualObj.noteTimings) {
-				explanation.innerText = "First start playing to load audio before seeking.";
-				return;
-			}
-			var units = this.value;
-			var max = 1;
-			switch (units) {
-				case "seconds":
-					max = synthControl.visualObj.getTotalTime();
-					break;
-				case "beats":
-					max = synthControl.visualObj.getTotalBeats();
-					break;
-			}
-			explanation.innerText = "Enter a number between 0 and {0}.".replace("{0}", max);
-		}
-
-		function seek2() {
-			var amount = document.getElementById("seek-amount").value;
-			var units = document.getElementById("seek-units").value;
-			synthControl.seek(amount, units)
-		}
-
-		function warp() {
-			var el = document.querySelector(".warp");
-			el.setAttribute("disabled", true)
-			var amount = Math.random()
-			console.log("warp", amount)
-			synthControl.setWarp(amount*100).then(function () {
-				el.removeAttribute("disabled")
-			})
-		}
-
-		function setTune(userAction) {
-			var seekControls = document.querySelector(".seek-controls");
-			seekControls.classList.add("disabled");
-			synthControl.disable(true);
-            // Render ABC into id="paper"
-			var visualObj = ABCJS.renderAbc("paper", abc[currentTune], abcOptions)[0];
-			// Create Synth
-            // var midi = ABCJS.synth.getMidiFile("X:1\nT:Cooley's\netc...", { chordsOff: true, midiOutputType: "link" });
-            var midi = ABCJS.synth.getMidiFile(abc[currentTune]);
-            var midiButton = document.querySelector(".midi");
-			midiButton.innerHTML = midi;
-
-			// TODO-PER: This will allow the callback function to have access to timing info - this should be incorporated into the render at some point.
-			var midiBuffer = new ABCJS.synth.CreateSynth();
-			midiBuffer.init({
-				//audioContext: new AudioContext(),
-				visualObj: visualObj,
-				// sequence: [],
-				// millisecondsPerMeasure: 1000,
-				// debugCallback: function(message) { console.log(message) },
-				options: {
-					// soundFontUrl: "https://paulrosen.github.io/midi-js-soundfonts/FluidR3_GM/" ,
-					// sequenceCallback: function(noteMapTracks, callbackContext) { return noteMapTracks; },
-					// callbackContext: this,
-					// onEnded: function(callbackContext),
-					// pan: [ -0.5, 0.5 ]
-				}
-			}).then(function (response) {
-				console.log(response);
-				if (synthControl) {
-					synthControl.setTune(visualObj, userAction).then(function (response) {
-						console.log("Audio successfully loaded.")
-						seekControls.classList.remove("disabled");
-						seekExplanation();
-					}).catch(function (error) {
-						console.warn("Audio problem:", error);
-					});
-				}
-			}).catch(function (error) {
-				console.warn("Audio problem:", error);
-			});
-		}
-
-		function next() {
-			currentTune++;
-			if (currentTune >= abc.length)
-				currentTune = 0;
-			setTune(true);
-		}
-
-        load();
+                var visualObj = ABCJS.renderAbc("paper", 
+                    abc, abcOptions);
+                var createSynth = new ABCJS.synth.CreateSynth();
+                createSynth.init({ 
+                        visualObj: visualObj[0],
+                    }
+                ).then(function () {
+                    synthControl.setTune(visualObj[0], false, audioParams).then(function () {
+                        console.log("Audio successfully loaded.")
+                    }).catch(function (error) {
+                        console.warn("Audio problem:", error);
+                    });
+                }).catch(function (error) {
+                    console.warn("Audio problem:", error);
+                });
+            } else {
+                document.querySelector("#audio").innerHTML = 
+                    "Audio is not supported in this browser.";
+                }
         </script>
         <br>
         <h4>Plain ABC notation</h4>
