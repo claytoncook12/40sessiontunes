@@ -12,16 +12,16 @@
 {% if abc_list %}
     {% for abc in abc_list %}
         Key: {{ abc.key }}
-        <!-- generating abc notes-->
+        <!-- generating abc with javascript -->
         <div id="paper"></div>
         <script type="text/javascript">
-            var abc = `{{ abc.text|safe }}`;
+            var abc = `{{ abc.abc_full_default|safe }}`;
             var visualOptions = { responsive: 'resize' };
             ABCJS.renderAbc("paper", abc);  //visualOptions);
         </script>
         <br>
         <h4>Plain ABC notation</h4>
-        <p style="white-space: pre-wrap;">{{ abc.text|safe }}</p>
+        <p style="white-space: pre-wrap;">{{ abc.abc_full_default|safe }}</p>
         <br>
     {% endfor %}
 {% else %}
