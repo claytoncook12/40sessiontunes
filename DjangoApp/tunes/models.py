@@ -26,7 +26,7 @@ class Composer(models.Model):
         return self.name
 
 class UnitNoteLength(models.Model):
-    unit_note_length = models.CharField('Unit Note Length', max_length=50, default="1/4")
+    unit_note_length = models.CharField('Unit Note Length', max_length=50, unique=True, default="1/4")
 
     def __str__(self):
         return self.unit_note_length
