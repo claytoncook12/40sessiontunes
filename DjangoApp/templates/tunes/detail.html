@@ -21,12 +21,11 @@
         <script type="text/javascript">
             // given that there are two elements in the DOM with the IDs "paper" and "audio"
             var cursorControl = {}; // see section on CursorControl
-            var abc = `{{ abc.abc_full_default|safe }}`;
+            var abc = `{{ abc.abc_full_default_bpm|safe }}`;
             var abcOptions = { add_classes: true };
             var audioParams = {
                 chordsOff: true,
                 program: 41,
-                qpm: 110, //TODO Need to set default BPM somewhere in audio parameters
             };
 
             if (ABCJS.synth.supportsAudio()) {

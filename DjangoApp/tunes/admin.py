@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import TuneType, Key, Tune, Composer, Meter, UnitNoteLength
+from .models import TuneType, Key, Tune, Composer, Meter, UnitNoteLength, BPM
 from .models import ABCTune, ABCTunePiece
 
 # Register your models here.
@@ -22,6 +22,10 @@ class MeterAdmin(admin.ModelAdmin):
 @admin.register(UnitNoteLength)
 class UnitNoteLengthAdmin(admin.ModelAdmin):
     ordering = ('unit_note_length',)
+
+@admin.register(BPM)
+class UnitNoteLengthAdmin(admin.ModelAdmin):
+    ordering = ('bpm',)
 
 @admin.register(Tune)
 class TuneAdmin(admin.ModelAdmin):
