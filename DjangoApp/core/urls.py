@@ -24,6 +24,8 @@ urlpatterns = [
     path('adminsite/', admin.site.urls),
     path('', views.home, name='home'),
     path('tunes/', include('tunes.urls', namespace='tunes')),
+    path('midiexample1/', views.midiexample_1, name="midiexample_1"),
+    path('midiexample2/', views.midiexample_2, name="midiexample_2"),
 ]
 
 # Folder for Local Media Files
