@@ -6,6 +6,43 @@
 <script src="{% static 'tunes/js/abcjs-basic-min.js' %}" type="text/javascript"></script>
 <!-- ABCJS Audio Style -->
 <link rel="stylesheet" type="text/css" href="{% static 'tunes/css/abcjs-audio.css' %}">
+<style>
+    main {
+        max-width: 770px;
+        margin: 0 auto;
+    }
+    .feedback {
+        height: 600px;
+        font-family: Arial, "sans-serif";
+    }
+    .highlight {
+        fill: #0a9ecc;
+    }
+    .abcjs-cursor {
+        stroke: red;
+    }
+    .click-explanation {
+        color: red;
+        font-style: italic;
+    }
+    .beat {
+        font-weight: bold;
+    }
+    .label {
+        color: #888888;
+}
+    .midi {
+        margin-top: 20px;
+        margin-left: 5px;
+    }
+    .seek-controls {
+        margin-top: 5px;
+    }
+    .seek-controls.disabled {
+        background-color: #cccccc;
+        opacity: 0.5;
+    }
+</style>
 
 <h1 style="display:inline;">{{ tune.name }} <h2 style="display:inline;">{{ tune.tune_type }}</h2></h1> 
 <hr>
@@ -17,10 +54,57 @@
         <!-- divs for abc paper and audio -->
         <div id="paper"></div>
         <div id="audio"></div>
+        <div class="midi">MIDI</div>
         <!-- Scripts for making notes and audio -->
         <script type="text/javascript">
             // given that there are two elements in the DOM with the IDs "paper" and "audio"
-            var cursorControl = {}; // see section on CursorControl
+            function CursorControl() {
+                var self = this;
+
+                self.onStart = function() {
+                    var svg = document.querySelector("#paper svg");
+                    var cursor = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                    cursor.setAttribute("class", "abcjs-cursor");
+                    cursor.setAttributeNS(null, 'x1', 0);
+                    cursor.setAttributeNS(null, 'y1', 0);
+                    cursor.setAttributeNS(null, 'x2', 0);
+                    cursor.setAttributeNS(null, 'y2', 0);
+                    svg.appendChild(cursor);
+
+                };
+                self.beatSubdivisions = 2;
+                self.onEvent = function(ev) {
+                    if (ev.measureStart && ev.left === null)
+                        return; // this was the second part of a tie across a measure line. Just ignore it.
+
+                    var lastSelection = document.querySelectorAll("#paper svg .highlight");
+                    for (var k = 0; k < lastSelection.length; k++)
+                        lastSelection[k].classList.remove("highlight");
+
+                    var cursor = document.querySelector("#paper svg .abcjs-cursor");
+                    if (cursor) {
+                        cursor.setAttribute("x1", ev.left - 2);
+                        cursor.setAttribute("x2", ev.left - 2);
+                        cursor.setAttribute("y1", ev.top);
+                        cursor.setAttribute("y2", ev.top + ev.height);
+                    }
+                };
+                self.onFinished = function() {
+                    var els = document.querySelectorAll("svg .highlight");
+                    for (var i = 0; i < els.length; i++ ) {
+                        els[i].classList.remove("highlight");
+                    }
+                    var cursor = document.querySelector("#paper svg .abcjs-cursor");
+                    if (cursor) {
+                        cursor.setAttribute("x1", 0);
+                        cursor.setAttribute("x2", 0);
+                        cursor.setAttribute("y1", 0);
+                        cursor.setAttribute("y2", 0);
+                    }
+                };
+		    }
+            
+            var cursorControl = new CursorControl(); // see section on CursorControl
             var abc = `{{ abc.abc_full_default_bpm|safe }}`;
             var abcOptions = { add_classes: true };
             var audioParams = {
@@ -60,6 +144,10 @@
                 document.querySelector("#audio").innerHTML = 
                     "Audio is not supported in this browser.";
                 }
+            
+            var midi = ABCJS.synth.getMidiFile(abc, { chordsOff: true});
+			var midiButton = document.querySelector(".midi");
+			midiButton.innerHTML = midi;
         </script>
         <br>
         <h4>Plain ABC notation</h4>
