@@ -144,6 +144,10 @@
                 document.querySelector("#audio").innerHTML = 
                     "Audio is not supported in this browser.";
                 }
+            
+            var midi = ABCJS.synth.getMidiFile(abc, { chordsOff: true});
+			var midiButton = document.querySelector(".midi");
+			midiButton.innerHTML = midi;
         </script>
         <br>
         <h4>Plain ABC notation</h4>
