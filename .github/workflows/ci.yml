@@ -20,6 +20,14 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r DjangoApp/requirements.txt
+      - name: Create env file
+        run: |
+          touch DjangoApp/.env
+          echo "# Set environment variables" >> DjangoApp/.env
+          echo "SECRET_KEY = ${{ secrets.SECRET_KEY }}" >> DjangoApp/.env
+          echo "DEBUG = ${{ secrets.DEBUG }}" >> DjangoApp/.env
+          echo "ALLOWED_HOSTS = ${{ secrets.ALLOWED_HOSTS }}" >> DjangoApp/.env
+          cat DjangoApp/.env
       - name: Run tests with pytest
         working-directory: ./DjangoApp
         run: pytest 
