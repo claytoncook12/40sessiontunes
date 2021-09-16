@@ -97,10 +97,9 @@ else:
             'PASSWORD': 'postgres',
             'HOST': 'localhost', #db
             'PORT': 6543, #5432
-        },
-        'TEST': {
-            'ENGINE': 'django.db.backends.sqlite3',
-        }
+            'TEST': {
+                'ENGINE': 'django.db.backends.sqlite3',
+            }
     }
 
 
