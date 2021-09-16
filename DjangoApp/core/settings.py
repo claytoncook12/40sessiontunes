@@ -100,6 +100,7 @@ else:
             'TEST': {
                 'ENGINE': 'django.db.backends.sqlite3',
             }
+        }
     }
 
 
