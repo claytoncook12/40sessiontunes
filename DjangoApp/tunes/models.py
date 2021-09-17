@@ -107,7 +107,7 @@ class ABCTune(models.Model):
             f'{self.abc_line_meter()}\n'
             f'{self.abc_line_key()}\n'
             f'{self.abc_line_unit_note_length()}\n'
-            f'{self.abc_default_notes()}\n'
+            f'{self.abc_default_notes()}'
         )
     
     def abc_full_default_bpm(self):
@@ -122,7 +122,7 @@ class ABCTune(models.Model):
             f'{self.abc_line_key()}\n'
             f'{self.abc_line_unit_note_length()}\n'
             f'{self.abc_line_bpm()}\n'
-            f'{self.abc_default_notes()}\n'
+            f'{self.abc_default_notes()}'
         )
 
 class ABCTunePiece(models.Model):
