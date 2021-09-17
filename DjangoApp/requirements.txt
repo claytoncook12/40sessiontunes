@@ -4,4 +4,7 @@ python-decouple
 whitenoise
 gunicorn
 factory-boy
+pytest
 pytest-django
+pytest-cov
+git+git://github.com/mverteuil/pytest-ipdb.git
