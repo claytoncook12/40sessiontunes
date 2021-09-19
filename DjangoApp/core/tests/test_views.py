@@ -9,6 +9,8 @@ class TestHomeView:
         response = client.get(reverse("home"))
         
         assert response.status_code == 200, "Home View returns 200 status"
+        assert "<title>40SessionTunes</title>" in \
+            response.content.decode(), "Home View renders with correct title"
 
 class TestMidiExample1View:
     def test_response(self):
