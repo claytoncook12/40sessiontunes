@@ -141,7 +141,7 @@ class ABCTune(models.Model):
         # Remove initial bar information before splitting
         if abc_piece[0] == "|":
             abc_piece = abc_piece[1:]
-        if abc_piece[1] == ":":
+        if abc_piece[0] == ":":
             abc_piece = abc_piece[1:]
         
         # Split ABC text into bars
