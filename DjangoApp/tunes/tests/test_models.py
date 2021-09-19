@@ -128,11 +128,16 @@ class TestABCTune:
         obj_abc_piece = factories.ABCTunePieceFactory(
             abc_tune = obj_abc_tune,
             part_order = 1,
-            abc_piece = "|:~G3D EDB,D|GFGB d2Bd|eged BAGA|BAGE EDDE|"
+            abc_piece = "|:~G3D EDB,D|GFGB d2Bd|eged BAGA|BAGE EDDE:|"
         )
         assert obj_abc_tune.abc_piece_and_bars(1, 1) == "|~G3D EDB,D|", "Return one abc text bar"
         assert obj_abc_tune.abc_piece_and_bars(1, 2) == "|~G3D EDB,D|GFGB d2Bd|", "Return two abc text bars"
         assert obj_abc_tune.abc_piece_and_bars(1, 3) == "|~G3D EDB,D|GFGB d2Bd|eged BAGA|", "Return two abc text bars"
+
+        # If more bars than in tune
+        with pytest.raises(ValueError):
+            obj_abc_tune.abc_piece_and_bars(1,5) == ValueError, \
+            "Shoud return error since more bars are requested than in abc text"
 
 @pytest.mark.django_db
 class TestABCTunePiece:

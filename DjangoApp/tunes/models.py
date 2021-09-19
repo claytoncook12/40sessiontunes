@@ -143,9 +143,15 @@ class ABCTune(models.Model):
             abc_piece = abc_piece[1:]
         if abc_piece[0] == ":":
             abc_piece = abc_piece[1:]
-        
+        if abc_piece[-1] == "|":
+            abc_piece = abc_piece[:-1]
+        if abc_piece[-1] == ":":
+            abc_piece = abc_piece[:-1]
+
         # Split ABC text into bars
         abc_piece_bars = abc_piece.split("|")
+        if bars > len(abc_piece_bars):
+            raise ValueError(f'Only {len(abc_piece_bars)} in abc text and {bars} bars were requested.')
         try:
             # Return bars from text
             abc_return = ""
