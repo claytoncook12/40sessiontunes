@@ -8,11 +8,13 @@
     <tr>
       <th>Tune</th>
       <th>Type</th>
+      <th>First Two Bars</th>
     </tr>
     {% for tune in tunes %}
     <tr>
       <td><a href="{{tune.get_absolute_url}}">{{ tune.name }}</a></td>
       <td>{{ tune.tune_type }}</td>
+      <td>{{ tune.first_two_bars }}</td>
     </tr>
     {% endfor %}
   </table>

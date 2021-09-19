@@ -50,6 +50,9 @@ class Tune(models.Model):
     
     def get_absolute_url(self):
         return reverse('tunes:detail', kwargs={"id": self.id})
+    
+    def first_two_bars(self):
+        return ABCTune.objects.get(tune=self).abc_piece_and_bars(1, 2)
    
 class ABCTune(models.Model):
     tune = models.ForeignKey(Tune, on_delete=models.CASCADE, verbose_name="Tune")
