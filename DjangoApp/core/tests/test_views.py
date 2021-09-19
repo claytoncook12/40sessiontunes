@@ -9,3 +9,17 @@ class TestHomeView:
         response = client.get(reverse("home"))
         
         assert response.status_code == 200, "Home View returns 200 status"
+
+class TestMidiExample1View:
+    def test_response(self):
+        client = Client()
+        response = client.get(reverse("midiexample_1"))
+        
+        assert response.status_code == 200, "Midi Example 1 View returns 200 status"
+
+class TestMidiExample2View:
+    def test_response(self):
+        client = Client()
+        response = client.get(reverse("midiexample_2"))
+        
+        assert response.status_code == 200, "Midi Example 2 View returns 200 status"
