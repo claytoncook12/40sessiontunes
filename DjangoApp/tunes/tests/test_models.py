@@ -116,6 +116,10 @@ class TestABCTune:
         assert abc_correct == abc_text_return, "ABC text should contain all header information except bpm"
 
     def test_abc_piece_and_bars(self):
+        """
+        Return abc text from ABCTune model with varying number
+        of bars returned
+        """
         obj_abc_tune = factories.ABCTuneFactory()
 
         # If no abc text for ABCTune
@@ -126,7 +130,9 @@ class TestABCTune:
             part_order = 1,
             abc_piece = "~G3D EDB,D|GFGB d2Bd|eged BAGA|BAGE EDDE|"
         )
-        assert obj_abc_tune.abc_piece_and_bars(1, 2) == "~G3D EDB,D|GFGB d2Bd|"
+        assert obj_abc_tune.abc_piece_and_bars(1, 1) == "|~G3D EDB,D|", "Return one abc text bar"
+        assert obj_abc_tune.abc_piece_and_bars(1, 2) == "|~G3D EDB,D|GFGB d2Bd|", "Return two abc text bars"
+        assert obj_abc_tune.abc_piece_and_bars(1, 3) == "|~G3D EDB,D|GFGB d2Bd|eged BAGA|", "Return two abc text bars"
 
 @pytest.mark.django_db
 class TestABCTunePiece:

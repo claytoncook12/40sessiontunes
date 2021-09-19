@@ -134,7 +134,25 @@ class ABCTune(models.Model):
         except  ABCTunePiece.DoesNotExist:
             return None
 
-        return abc_piece
+        # Remove initial bar information before splitting
+        if abc_piece[0] == "|":
+            abc_piece = abc_piece[1:]
+        if abc_piece[1] == ":":
+            abc_piece = abc_piece[1:]
+        
+        # Split ABC text into bars
+        abc_piece_bars = abc_piece.split("|")
+        try:
+            # Return bars from text
+            abc_return = ""
+            for abc_bars in abc_piece_bars[:bars]:
+                abc_return += abc_bars + "|"
+            # Add back bar symbol at beginning
+            abc_return = "|" + abc_return
+        except:
+            print(f"Error with parsing abc text in {self}")
+
+        return abc_return
 
 
 class ABCTunePiece(models.Model):
