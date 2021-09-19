@@ -116,6 +116,7 @@ class ABCTune(models.Model):
     def abc_full_default_bpm(self):
         """
         Return full abc with just the parts that are marked default
+        with bpm
         """
         
         return (
