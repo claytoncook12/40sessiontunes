@@ -125,6 +125,18 @@ class ABCTune(models.Model):
             f'{self.abc_default_notes()}'
         )
 
+    def abc_piece_and_bars(self, part_order=1, bars=2):
+        """
+        Returns the numbers of bars from a ABCTunePiece
+        """
+        try:
+            abc_piece = ABCTunePiece.objects.get(abc_tune=self, part_order=part_order).abc_piece
+        except  ABCTunePiece.DoesNotExist:
+            return None
+
+        return abc_piece
+
+
 class ABCTunePiece(models.Model):
     abc_tune = models.ForeignKey(ABCTune, on_delete=models.CASCADE, verbose_name="ABC Tune")
     part_order = models.IntegerField('Part Number', default=1)

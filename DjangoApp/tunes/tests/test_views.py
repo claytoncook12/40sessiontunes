@@ -33,4 +33,4 @@ class TestListView:
 
         assert response.status_code == 200, "View return 200 status code"
         assert tune1.name in response.content.decode(), "tune1.name shows in the list view"
-        assert tune2.name in response.content.decode(), "tune2.name shows in the list view" 
+        assert tune2.name in response.content.decode(), "tune2.name shows in the list view"
