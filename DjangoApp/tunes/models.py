@@ -152,15 +152,13 @@ class ABCTune(models.Model):
         abc_piece_bars = abc_piece.split("|")
         if bars > len(abc_piece_bars):
             raise ValueError(f'Only {len(abc_piece_bars)} in abc text and {bars} bars were requested.')
-        try:
-            # Return bars from text
-            abc_return = ""
-            for abc_bars in abc_piece_bars[:bars]:
-                abc_return += abc_bars + "|"
-            # Add back bar symbol at beginning
-            abc_return = "|" + abc_return
-        except:
-            print(f"Error with parsing abc text in {self}")
+        
+        # Return bars from text
+        abc_return = ""
+        for abc_bars in abc_piece_bars[:bars]:
+            abc_return += abc_bars + "|"
+        # Add back bar symbol at beginning
+        abc_return = "|" + abc_return
 
         return abc_return
 
