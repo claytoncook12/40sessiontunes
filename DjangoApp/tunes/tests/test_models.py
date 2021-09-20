@@ -62,6 +62,14 @@ class TestABCTune:
             )
         )
         assert obj.abc_line_composer() == "C:Test Name", "Should contain ABC format of C:composer_name"
+
+        obj = factories.ABCTuneFactory(
+            tune=factories.TuneFactory(
+                composer=None
+            )
+        )
+
+        assert obj.abc_line_composer() == "C:", "Shoud be blank for composer in ABC format"
     
     def test_abc_line_bpm(self):
         obj = factories.ABCTuneFactory(bpm=None)

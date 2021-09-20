@@ -69,6 +69,8 @@ class ABCTune(models.Model):
         return f'T:{self.tune.name}'
     
     def abc_line_composer(self):
+        if self.tune.composer == None:
+            return 'C:'
         return f'C:{self.tune.composer}'
     
     def abc_line_key(self):
