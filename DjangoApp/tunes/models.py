@@ -112,6 +112,7 @@ class ABCTune(models.Model):
         return (
             f'{self.abc_line_title()}\n'
             f'{self.abc_line_composer()}\n'
+            f'{self.abc_line_rhythm()}\n'
             f'{self.abc_line_meter()}\n'
             f'{self.abc_line_key()}\n'
             f'{self.abc_line_unit_note_length()}\n'
@@ -127,6 +128,7 @@ class ABCTune(models.Model):
         return (
             f'{self.abc_line_title()}\n'
             f'{self.abc_line_composer()}\n'
+            f'{self.abc_line_rhythm()}\n'
             f'{self.abc_line_meter()}\n'
             f'{self.abc_line_key()}\n'
             f'{self.abc_line_unit_note_length()}\n'

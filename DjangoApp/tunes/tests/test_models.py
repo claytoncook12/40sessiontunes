@@ -117,7 +117,7 @@ class TestABCTune:
         )
         abc_text_return = obj_abc_tune.abc_full_default_bpm()
 
-        abc_correct = """T:The Banshee\nC:James McMahon\nM:4/4\nK:Gmajor\nL:1/8\nQ:1/4=120\n|abcd|\n|defg|\n"""
+        abc_correct = """T:The Banshee\nC:James McMahon\nR:reel\nM:4/4\nK:Gmajor\nL:1/8\nQ:1/4=120\n|abcd|\n|defg|\n"""
 
         assert abc_correct == abc_text_return, "ABC text should contain all header information"
     
@@ -133,7 +133,7 @@ class TestABCTune:
         )
         abc_text_return = obj_abc_tune.abc_full_default()
 
-        abc_correct = """T:The Banshee\nC:James McMahon\nM:4/4\nK:Gmajor\nL:1/8\n|abcd|\n|defg|\n"""
+        abc_correct = """T:The Banshee\nC:James McMahon\nR:reel\nM:4/4\nK:Gmajor\nL:1/8\n|abcd|\n|defg|\n"""
         
         assert abc_correct == abc_text_return, "ABC text should contain all header information except bpm"
 
