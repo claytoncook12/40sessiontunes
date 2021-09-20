@@ -75,8 +75,22 @@ class TestABCTune:
         obj = factories.ABCTuneFactory(bpm=None)
         assert obj.abc_line_bpm() == ""   
         
-        obj = factories.ABCTuneFactory(bpm=factories.BPMFactory(bpm='1/4=120'))
+        obj = factories.ABCTuneFactory(
+            bpm=factories.BPMFactory(
+                bpm='1/4=120'
+            )
+        )
         assert obj.abc_line_bpm() == "Q:1/4=120"     
+    
+    def test_abc_line_rhythm(self):
+        obj = factories.ABCTuneFactory(
+            tune = factories.TuneFactory(
+                tune_type=factories.TuneTypeFactory(
+                    tune_type_char = "reel"
+                )
+            )
+        )
+        assert obj.abc_line_rhythm() == "R:reel"
 
     def test_abc_default_notes(self):
         obj_abc_tune = factories.ABCTuneFactory()

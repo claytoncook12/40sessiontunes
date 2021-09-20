@@ -88,6 +88,9 @@ class ABCTune(models.Model):
         else:
             return f''
     
+    def abc_line_rhythm(self):
+        return f'R:{self.tune.tune_type}'
+    
     def abc_default_notes(self):
         """
         Return only default parts from ABCTunePiece
