@@ -172,3 +172,6 @@ class ABCTunePiece(models.Model):
         default="Part #", null=True, blank=True)
     default = models.BooleanField('Default Part?', default=True)
     abc_piece = models.TextField('ABC text for part of Tune')
+
+    class Meta:
+        ordering = ['part_order']
