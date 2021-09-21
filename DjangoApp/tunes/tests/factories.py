@@ -86,6 +86,7 @@ class ReferenceAudioFactory(factory.django.DjangoModelFactory):
     tune_type = factory.SubFactory(TuneTypeFactory)
     bpm = factory.SubFactory(BPMFactory)
     parts = 2
+    repeats = 3
     meter = factory.SubFactory(MeterFactory)
     beats_buffer = 8
     beats_countin = 8

@@ -186,6 +186,7 @@ class ReferenceAudio(models.Model):
     tune_type = models.ForeignKey(TuneType, on_delete=models.CASCADE, verbose_name="Tune Type")
     bpm = models.ForeignKey(BPM, on_delete=models.CASCADE, verbose_name="Beats Per Minute of reference recording")
     parts = models.IntegerField("numbers of parts of tune")
+    repeats = models.IntegerField("number of repeats of tune")
     meter = models.ForeignKey(Meter, on_delete=models.CASCADE, verbose_name="Meter")
     beats_buffer = models.IntegerField("number of beats for buffer at beginning of reference recording") 
     beats_countin = models.IntegerField("number of count-in beats at beginning of reference recording")
@@ -193,3 +194,7 @@ class ReferenceAudio(models.Model):
     beats_per_part = models.IntegerField("number of beats per part")
     audio_file = models.FileField(upload_to=settings.MEDIA_ROOT / "ReferenceAudio")
     description = models.TextField("description of reference audio")
+
+    def __str__(self):
+        return f"Ref Audio: {self.tune_type.tune_type_char}," \
+               f" {self.parts} parts, {self.repeats} repeats, {self.bpm.bpm} BPM"

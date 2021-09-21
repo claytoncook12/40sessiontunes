@@ -169,6 +169,10 @@ class TestABCTunePiece:
 
 @pytest.mark.django_db
 class TestReferenceAudio:
+    def test_str(self):
+        obj = factories.ReferenceAudioFactory()
+        assert str(obj) == "Ref Audio: reel, 2 parts, 3 repeats, 1/4=120 BPM", "Check obj string"
+    
     def test_init(self):
         obj = factories.ReferenceAudioFactory()
         assert obj.pk == 1, "Should save an instance"
