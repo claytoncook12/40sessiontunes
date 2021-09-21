@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import TuneType, Key, Tune, Composer, Meter, UnitNoteLength, BPM
 from .models import ABCTune, ABCTunePiece
+from .models import ReferenceAudio
 
 # Register your models here.
 @admin.register(TuneType)
@@ -52,3 +53,7 @@ class ABCTextAdmin(admin.ModelAdmin):
     ordering = ("tune",)
     list_filter = ("key",)
     inlines = [ABCTunePieceInline]
+
+@admin.register(ReferenceAudio)
+class ReferenceAudioAdmin(admin.ModelAdmin):
+    list_filter = ("tune_type__tune_type_char",)
