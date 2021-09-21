@@ -140,6 +140,10 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = Path(BASE_DIR) / 'static'
 
+# Generated Audio Files Location
+MEDIA_ROOT = Path(BASE_DIR) / "media"
+MEDIA_URL = '/media/'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 

@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from django.urls import reverse
 
@@ -180,3 +181,15 @@ class ABCTunePiece(models.Model):
 
     class Meta:
         ordering = ['part_order']
+
+class ReferenceAudio(models.Model):
+    tune_type = models.ForeignKey(TuneType, on_delete=models.CASCADE, verbose_name="Tune Type")
+    bpm = models.ForeignKey(BPM, on_delete=models.CASCADE, verbose_name="Beats Per Minute of reference recording")
+    parts = models.IntegerField("numbers of parts of tune")
+    meter = models.ForeignKey(Meter, on_delete=models.CASCADE, verbose_name="Meter")
+    beats_buffer = models.IntegerField("number of beats for buffer at beginning of reference recording") 
+    beats_countin = models.IntegerField("number of count-in beats at beginning of reference recording")
+    beats_ending = models.IntegerField("number of beats at end of reference recording")
+    beats_per_part = models.IntegerField("number of beats per part")
+    audio_file = models.FileField(upload_to=settings.MEDIA_ROOT / "ReferenceAudio")
+    description = models.TextField("description of reference audio")

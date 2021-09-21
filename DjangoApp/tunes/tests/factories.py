@@ -1,5 +1,7 @@
 import factory
+from pathlib import Path
 
+from django.conf import settings
 from tunes import models
 
 class TuneTypeFactory(factory.django.DjangoModelFactory):
@@ -14,7 +16,7 @@ class KeyFactory(factory.django.DjangoModelFactory):
         model = models.Key
         django_get_or_create = ('key_type_char',)
     
-    key_type_char = "Gmajor"
+    key_type_char = "G Major"
 
 class MeterFactory(factory.django.DjangoModelFactory):
     class Meta:
@@ -76,4 +78,18 @@ class ABCTunePieceFactory(factory.django.DjangoModelFactory):
                 "G"~G3D EDB,D|GFGB d2Bd|"C"eged BAGA|"G"BAGE "D"EDDE|
                 "G"~G3D EDB,D|GFGB d2Bd|"C"eged BAGA|"G"BAGE "D"EDD2:|
                 """
+
+class ReferenceAudioFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = models.ReferenceAudio
     
+    tune_type = factory.SubFactory(TuneTypeFactory)
+    bpm = factory.SubFactory(BPMFactory)
+    parts = 2
+    meter = factory.SubFactory(MeterFactory)
+    beats_buffer = 8
+    beats_countin = 8
+    beats_ending = 8
+    beats_per_part = 32
+    audio_file = str(Path(settings.MEDIA_ROOT) / "ReferenceAudio" / "Reel-2Part-3Repeats-70BPM.mp3")
+    description = "refernce file of reel, 2 parts, 3 repeats, 3/8=70 BPM"
