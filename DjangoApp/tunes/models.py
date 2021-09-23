@@ -2,6 +2,8 @@ from django.conf import settings
 from django.db import models
 from django.urls import reverse
 
+from django.core.exceptions import ValidationError
+
 from pathlib import Path
 
 from pydub import AudioSegment
@@ -203,10 +205,10 @@ class ReferenceAudio(models.Model):
                                   verbose_name="Reference Audio MP3 file")
     description = models.TextField("description of reference audio", null=True, blank=True)
 
-    def save(self, *args, **kwargs):
+    def clean(self, *args, **kwargs):
+        super().clean()
         if Path(self.audio_file.path).suffix != ".mp3":
-            raise WrongFileType('File Type must be .mp3')
-        super(ReferenceAudio, self).save(*args, **kwargs)
+            raise ValidationError('Reference Audio MP3 file be .mp3')
 
     def __str__(self):
         return f"Ref Audio: {self.tune_type.tune_type_char}," \

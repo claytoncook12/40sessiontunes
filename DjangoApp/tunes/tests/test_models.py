@@ -3,6 +3,8 @@ from django.conf import settings
 from tunes.tests import factories
 from tunes.models import WrongFileType
 
+from django.core.exceptions import ValidationError
+
 from pathlib import Path
 
 from pydub import AudioSegment
@@ -190,8 +192,9 @@ class TestReferenceAudio:
         # Length of Audio Track in milliseconds
         assert obj.audio_file_length_milliseconds_round == 185143, "Length of time in milliseconds of mp3 file"
     
-    def test_save(self):
-        with pytest.raises(WrongFileType):
+    def test_clean(self):
+        with pytest.raises(ValidationError):
             obj = factories.ReferenceAudioFactory(
                 audio_file = str(Path(settings.MEDIA_ROOT) / "fixtures" / "tunes" / "referenceaudio" / "test.wav")
             )
+            obj.clean(), "Should raise error on clean due to file type not being .mp3"
