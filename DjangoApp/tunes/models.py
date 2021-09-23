@@ -201,7 +201,7 @@ class ReferenceAudio(models.Model):
     beats_per_part = models.IntegerField("number of beats per part")
     audio_file = models.FileField(upload_to=settings.MEDIA_ROOT / "ReferenceAudio",
                                   verbose_name="Reference Audio MP3 file")
-    description = models.TextField("description of reference audio")
+    description = models.TextField("description of reference audio", null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if Path(self.audio_file.path).suffix != ".mp3":
