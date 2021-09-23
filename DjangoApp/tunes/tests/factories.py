@@ -92,5 +92,5 @@ class ReferenceAudioFactory(factory.django.DjangoModelFactory):
     beats_countin = 8
     beats_ending = 8
     beats_per_part = 32
-    audio_file = str(Path(settings.MEDIA_ROOT) / "ReferenceAudio" / "Reel-2Part-3Repeats-70BPM.mp3")
+    audio_file = str(Path(settings.MEDIA_ROOT) / "fixtures" / "tunes" / "referenceaudio" / "Reel-2Part-3Repeats-70BPM.mp3")
     description = "refernce file of reel, 2 parts, 3 repeats, 3/8=70 BPM"

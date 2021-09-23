@@ -1,6 +1,8 @@
 # test_models.py
 from tunes.tests import factories
 
+from pydub import AudioSegment
+
 import pytest
 
 @pytest.mark.django_db
@@ -176,3 +178,6 @@ class TestReferenceAudio:
     def test_init(self):
         obj = factories.ReferenceAudioFactory()
         assert obj.pk == 1, "Should save an instance"
+
+        # Size in bytes
+        assert obj.audio_file.size == 2963329, "Should be able to check audio file size"
