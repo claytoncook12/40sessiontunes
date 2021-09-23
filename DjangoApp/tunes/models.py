@@ -2,7 +2,12 @@ from django.conf import settings
 from django.db import models
 from django.urls import reverse
 
+from pathlib import Path
+
 from pydub import AudioSegment
+
+class WrongFileType(Exception):
+    pass
 
 class TuneType(models.Model):
     tune_type_char = models.CharField('Tune Type', max_length=50, unique=True)
@@ -194,8 +199,14 @@ class ReferenceAudio(models.Model):
     beats_countin = models.IntegerField("number of count-in beats at beginning of reference recording")
     beats_ending = models.IntegerField("number of beats at end of reference recording")
     beats_per_part = models.IntegerField("number of beats per part")
-    audio_file = models.FileField(upload_to=settings.MEDIA_ROOT / "ReferenceAudio")
+    audio_file = models.FileField(upload_to=settings.MEDIA_ROOT / "ReferenceAudio",
+                                  verbose_name="Reference Audio MP3 file")
     description = models.TextField("description of reference audio")
+
+    def save(self, *args, **kwargs):
+        if Path(self.audio_file.path).suffix != ".mp3":
+            raise WrongFileType('File Type must be .mp3')
+        super(ReferenceAudio, self).save(*args, **kwargs)
 
     def __str__(self):
         return f"Ref Audio: {self.tune_type.tune_type_char}," \
@@ -203,4 +214,9 @@ class ReferenceAudio(models.Model):
     
     @property
     def audio_file_length_milliseconds_round(self):
+        """
+        Uses pydub to read in mp3 file from database 
+        and return length of file in milliseconds rounded 
+        to the nearest millisecond
+        """
         return round(AudioSegment.from_mp3(self.audio_file).duration_seconds*1000)
