@@ -179,5 +179,11 @@ class TestReferenceAudio:
         obj = factories.ReferenceAudioFactory()
         assert obj.pk == 1, "Should save an instance"
 
+        # Check varing properties about default file
         # Size in bytes
         assert obj.audio_file.size == 2963329, "Should be able to check audio file size"
+
+        # Length of Audio Track in milliseconds
+        #audio = AudioSegment.from_mp3(obj.audio_file)
+        #duration_milliseconds = round(audio.duration_seconds*1000)
+        assert obj.audio_file_length_milliseconds_round == 185143, "Length of time in milliseconds of mp3 file"

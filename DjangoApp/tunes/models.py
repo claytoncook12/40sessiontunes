@@ -2,6 +2,8 @@ from django.conf import settings
 from django.db import models
 from django.urls import reverse
 
+from pydub import AudioSegment
+
 class TuneType(models.Model):
     tune_type_char = models.CharField('Tune Type', max_length=50, unique=True)
 
@@ -198,3 +200,7 @@ class ReferenceAudio(models.Model):
     def __str__(self):
         return f"Ref Audio: {self.tune_type.tune_type_char}," \
                f" {self.parts} parts, {self.repeats} repeats, {self.bpm.bpm} BPM"
+    
+    @property
+    def audio_file_length_milliseconds_round(self):
+        return round(AudioSegment.from_mp3(self.audio_file).duration_seconds*1000)
