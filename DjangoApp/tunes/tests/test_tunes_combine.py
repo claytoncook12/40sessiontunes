@@ -8,16 +8,32 @@ import pytest
 from tunes import tunes_combine
 
 @pytest.mark.django_db
-class TestMakeSet:
-    @pytest.fixture()
+class Test:
+    @pytest.fixture
     def setup_data(self):
-        # Create 5 tunes for database
+        # Create 5 tunes, abctune, and abc for database
         self.tune1 = factories.TuneFactory(
             name = "Tune 1",
             tune_type = factories.TuneTypeFactory(
                 tune_type_char = "reel"
             )
         )
+        self.abctune1 = factories.ABCTuneFactory(
+            tune = self.tune1
+        )
+        self.abctune1peice1 = factories.ABCTunePieceFactory(
+            abc_tune = self.abctune1,
+            part_order = 1,
+            part_title = "Part 1",
+            abc_piece = "|abcd|"    
+        )
+        self.abctune1peice2 = factories.ABCTunePieceFactory(
+            abc_tune = self.abctune1,
+            part_order = 2,
+            part_title = "Part 2",
+            abc_piece = "|efga|"    
+        )
+        
         self.tune2 = factories.TuneFactory(
             name = "Tune 2",
             tune_type = factories.TuneTypeFactory(
@@ -61,3 +77,9 @@ class TestMakeSet:
         assert (self.tune3 in qs) == False, "Should not contain tune3"
         assert (self.tune4 in qs) == True, "Should contain tune4"
         assert (self.tune5 in qs) == True, "Should contain tune5"
+    
+    def test_combine_abc(self, setup_data):
+        qs = tunes_combine.pull_tunes(num=3, tune_type="reel")
+        abc_text = tunes_combine.combine_abc(qs)
+
+        assert False == True, "Finish writting test"

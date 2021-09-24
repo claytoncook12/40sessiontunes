@@ -19,3 +19,18 @@ def pull_tunes(num: int, tune_type: str):
     qs = models.Tune.objects.filter(tune_type__tune_type_char=tune_type).order_by('?')[:num]
 
     return qs
+
+def combine_abc(qs):
+    """
+    Combine all abc text that is in qs (QuestSet)
+
+    Parameters
+    ----------
+        qs (QuerySet): query set from models.Tune
+    
+    Returns
+    -------
+        str: Combined abc text from qs
+    """
+
+    return "blank"
