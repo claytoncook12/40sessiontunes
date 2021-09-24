@@ -43,6 +43,7 @@ def combine_abc(qs):
         title += abctune.tune.name + " "
         abc_text_full += "P: " + abctune.tune.name + "\n"
         abc_text_full += "K: " + abctune.key.key_type_char + "\n"
+        abc_text_full += "M: " + abctune.meter.meter_type_char + "\n"
 
         # Get ABCTunePieces For Individual ABCTune
         qs_pieces = models.ABCTunePiece.objects.filter(

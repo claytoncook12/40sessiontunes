@@ -85,7 +85,10 @@ class Test:
             )
         )
         self.abctune4 = factories.ABCTuneFactory(
-            tune = self.tune4
+            tune = self.tune4,
+            meter = factories.MeterFactory(
+                meter_type_char = "6/8"
+            )
         )
         self.abctune4peice1 = factories.ABCTunePieceFactory(
             abc_tune = self.abctune4,
@@ -107,7 +110,10 @@ class Test:
             )
         )
         self.abctune5 = factories.ABCTuneFactory(
-            tune = self.tune5
+            tune = self.tune5,
+            meter = factories.MeterFactory(
+                meter_type_char = "6/8"
+            )
         )
         self.abctune5peice1 = factories.ABCTunePieceFactory(
             abc_tune = self.abctune5,
@@ -145,12 +151,12 @@ class Test:
         qs = tunes_combine.pull_tunes(num=3, tune_type="reel")
         abc_text = tunes_combine.combine_abc(qs)
 
-        assert "P: Tune 1\nK: G Major\n|abcd|\n|efgA|\n" in abc_text, "abctune1 piece 1 and 2 in abc_text output"
-        assert "P: Tune 2\nK: G Major\n|ABCD|\n|EFGa|\n" in abc_text, "abctune2 piece 1 and 2 in abc_text output"
-        assert "P: Tune 3\nK: G Major\n|aaaa|\n|bbbb|\n" in abc_text, "abctune2 piece 1 and 2 in abc_text output"
+        assert "P: Tune 1\nK: G Major\nM: 4/4\n|abcd|\n|efgA|\n" in abc_text, "abctune1 piece 1 and 2 in abc_text output"
+        assert "P: Tune 2\nK: G Major\nM: 4/4\n|ABCD|\n|EFGa|\n" in abc_text, "abctune2 piece 1 and 2 in abc_text output"
+        assert "P: Tune 3\nK: G Major\nM: 4/4\n|aaaa|\n|bbbb|\n" in abc_text, "abctune2 piece 1 and 2 in abc_text output"
 
         qs = tunes_combine.pull_tunes(num=2, tune_type="jig")
         abc_text = tunes_combine.combine_abc(qs)
 
-        assert "P: Tune 4\nK: G Major\n|aaa aaa|\n|bbb bbb|\n" in abc_text, "abctune4 piece 1 and 2 in abc_text output"
-        assert "P: Tune 5\nK: G Major\n|ccc ccc|\n|ddd ddd|\n" in abc_text, "abctune5 piece 1 and 2 in abc_text output"
+        assert "P: Tune 4\nK: G Major\nM: 6/8\n|aaa aaa|\n|bbb bbb|\n" in abc_text, "abctune4 piece 1 and 2 in abc_text output"
+        assert "P: Tune 5\nK: G Major\nM: 6/8\n|ccc ccc|\n|ddd ddd|\n" in abc_text, "abctune5 piece 1 and 2 in abc_text output"
