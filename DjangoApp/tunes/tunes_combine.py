@@ -13,7 +13,7 @@ def pull_tunes(num: int, tune_type: str):
     
     Returns
     -------
-        QuerySet: set that matches parameters
+        QuerySet: From Tune model
     """
 
     qs = models.Tune.objects.filter(tune_type__tune_type_char=tune_type).order_by('?')[:num]
