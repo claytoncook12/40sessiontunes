@@ -4,7 +4,7 @@ from tunes import models
 
 def pull_tunes(num: int, tune_type: str):
     """
-    Queries Tunes from database based on number needed
+    Queries ABCTunes from database based on number needed
 
     Parameters
     ----------
@@ -16,21 +16,40 @@ def pull_tunes(num: int, tune_type: str):
         QuerySet: From Tune model
     """
 
-    qs = models.Tune.objects.filter(tune_type__tune_type_char=tune_type).order_by('?')[:num]
+    qs = models.ABCTune.objects.filter(tune__tune_type__tune_type_char=tune_type).order_by('?')[:num]
 
     return qs
 
 def combine_abc(qs):
     """
     Combine all abc text that is in qs (QuestSet)
+    to create a complete set
 
     Parameters
     ----------
-        qs (QuerySet): query set from models.Tune
+        qs (QuerySet): query set from models.ABCTune
     
     Returns
     -------
         str: Combined abc text from qs
     """
 
-    return "blank"
+    abc_text_full = ""
+    title = "T: "
+    bpm = "Q:1/2=70" #TODO: Replace hardcoded bpm
+
+    for abctune in qs:
+        # Add Title of Tune, Part, and Key
+        title += abctune.tune.name + " "
+        abc_text_full += "P: " + abctune.tune.name + "\n"
+        abc_text_full += "K: " + abctune.key.key_type_char + "\n"
+
+        # Get ABCTunePieces For Individual ABCTune
+        qs_pieces = models.ABCTunePiece.objects.filter(
+            abc_tune__tune__pk = abctune.pk
+        )
+        # Build ABCPart Piece to Add
+        for abc_part in qs_pieces:
+            abc_text_full += abc_part.abc_piece + "\n"
+
+    return title + "\n" + bpm + "\n" + abc_text_full
