@@ -1,4 +1,4 @@
-name: Run Python Tests
+name: Run Python Tests with FFMPEG
 on:
   push:
     branches:
@@ -12,6 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Install ffmpeg
+        run: |
+          sudo apt-get install ffmpeg
+          ffmpeg -version
       - name: Install Python 3
         uses: actions/setup-python@v1
         with:
