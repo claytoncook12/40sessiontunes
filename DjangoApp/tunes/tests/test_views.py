@@ -124,6 +124,11 @@ class TestABCCombineView:
         )
 
         # Pass Query Parameters to URL
+        response = client.get(reverse("tunes:abc_combine"))
+
+        assert response.status_code == 200, "View returns 200 with no GET data"
+
+        # Pass Query Parameters to URL
         response = client.get(
             reverse_querystring("tunes:abc_combine", query_kwargs={
                 'num': 3, 
