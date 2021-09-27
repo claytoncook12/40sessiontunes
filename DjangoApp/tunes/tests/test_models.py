@@ -54,7 +54,7 @@ class TestABCTune:
     
     def test_str(self):
         obj = factories.ABCTuneFactory()
-        assert str(obj) == "The Banshee (reel) (G Major)"
+        assert str(obj) == "pk:1 The Banshee (reel) (G Major)"
     
     def test_abc_line_title(self):
         obj = factories.ABCTuneFactory(

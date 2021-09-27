@@ -72,7 +72,7 @@ class ABCTune(models.Model):
     bpm = models.ForeignKey(BPM, on_delete=models.CASCADE, verbose_name="Beats Per Minute", null=True, blank=True)
 
     def __str__(self):
-        return f'{self.tune} ({self.key})'
+        return f'pk:{self.pk} {self.tune} ({self.key})'
     
     # Methods to Return ABC from model
     def abc_line_title(self):
