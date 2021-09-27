@@ -44,30 +44,36 @@
     }
 </style>
 
-<h1 style="display:inline;">{{ tune.name }} <h2 style="display:inline;">{{ tune.tune_type }}</h2></h1> 
+<h1>Combine Tune</h1>
 <hr>
 
-{% if abc_list %}
+<!-- TODO Need Form For Selecting Tunes -->
+<h2>Need Form For Selecting Types</h2>
+<p>Number of tunes: {{num}}</p>
+<p>Tune Type: {{ tune_type }}</p>
+<hr>
+
+<h2>Combined ABC</h2>
+{% if abc_combined %}
     {% for abc in abc_list %}
-        Key: {{ abc.key }}
         <!-- divs for abc paper and audio -->
         <div id="paper"></div>
         <div id="audio"></div>
         <div class="midi">MIDI</div>
         
         <!-- Load Script to Update 
-             id="paper"
-             id="audio"
-             class="midi"
+                id="paper"
+                id="audio"
+                class="midi"
         -->
         {% include "tunes/subtemplates/render_abc_audio_midi.html" %}  
-
-        <!-- Show raw abc notation -->
+        <br>
+        
         <h4>ABC notation</h4>
         <p style="white-space: pre-wrap;">{{ abc.abc_full_default|safe }}</p>
         <br>
     {% endfor %}
 {% else %}
-    <p>No abc for tune.</p>
+    <p>No Tunes Queried Yet.</p>
 {% endif %}
 {% endblock %}

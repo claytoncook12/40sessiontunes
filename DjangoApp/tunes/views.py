@@ -26,3 +26,15 @@ def detail(request, id):
     }
 
     return render(request, 'tunes/detail.html', context)
+
+def abc_combine(request):
+
+    if request.method == "POST":
+        return render(request, 'tunes/abc_combine.html')
+    else:
+        context = {
+            "num": request.GET.get('num'),
+            "tune_type": request.GET.get('tune_type'),
+        }
+
+    return render(request, 'tunes/abc_combine.html', context)
