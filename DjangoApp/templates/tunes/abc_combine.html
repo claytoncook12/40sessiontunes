@@ -50,26 +50,33 @@
 <!-- Form For Selecting Tunes -->
 <form method="GET" action="{% url  'tunes:abc_combine' %}">
     {{ form.as_p }}
-    <p><input type="submit" value="Generate Tunes"></p>
+    <p><input type="submit" value="Generate Tune(s)"></p>
 </form>
 
-<h2>Combined ABC</h2>
-    {% if abc %}
-        <!-- divs for abc paper and audio -->
-        <div id="paper"></div>
-        <div id="audio"></div>
-        <div class="midi">MIDI</div>
-        
-        <!-- Load Script to Update 
-                id="paper"
-                id="audio"
-                class="midi"
-        -->
-        {% include "tunes/subtemplates/render_abc_audio_midi.html" with abc_text=abc %}
-        <br>
+<!-- Display Generated ABC Notation -->
+{% if abc %}
+    <h2>Combined ABC</h2>
+    <h3>Set:</h3>
+    <ol>
+    {% for tune_title in title %}
+        <li>{{ tune_title }}</li>
+    {% endfor %}
+    </ol>
+    <!-- divs for abc paper and audio -->
+    <div id="paper"></div>
+    <div id="audio"></div>
+    <div class="midi">MIDI</div>
 
-        <h4>ABC notation</h4>
-        <p style="white-space: pre-wrap;">{{ abc|safe }}</p>
-        <br>
-    {% endif %}
+    <!-- Load Script to Update 
+            id="paper"
+            id="audio"
+            class="midi"
+    -->
+    {% include "tunes/subtemplates/render_abc_audio_midi.html" with abc_text=abc %}
+    <br>
+
+    <h4>ABC notation</h4>
+    <p style="white-space: pre-wrap;">{{ abc|safe }}</p>
+    <br>
+{% endif %}
 {% endblock %}

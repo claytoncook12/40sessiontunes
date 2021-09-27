@@ -36,7 +36,7 @@ def abc_combine(request):
             if 'tune_type' in request.GET:
                 form = PullCombineABCForm(request.GET)
                 if form.is_valid():
-                    abc = combine_abc(
+                    abc, title = combine_abc(
                         pull_tunes(
                             num=int(form.cleaned_data['num']),
                             tune_type=form.cleaned_data['tune_type']
@@ -46,6 +46,7 @@ def abc_combine(request):
                     context = {
                         'form': form,
                         'abc': abc,
+                        'title': title,
                     }
 
                     return render(request, 'tunes/abc_combine.html', context)

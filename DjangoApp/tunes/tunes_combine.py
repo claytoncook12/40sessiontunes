@@ -32,25 +32,28 @@ def combine_abc(qs):
     Returns
     -------
         str: Combined abc text from qs
+        list: List of tune titles
     """
 
     abc_text_full = ""
-    title = "T: "
+    titles = []
     bpm = "Q:1/2=70" #TODO: Replace hardcoded bpm
 
     for abctune in qs:
         # Add Title of Tune, Part, and Key
-        title += abctune.tune.name + " "
+        titles += [abctune.tune.name]
         abc_text_full += "P: " + abctune.tune.name + "\n"
         abc_text_full += "K: " + abctune.key.key_type_char + "\n"
         abc_text_full += "M: " + abctune.meter.meter_type_char + "\n"
 
         # Get ABCTunePieces For Individual ABCTune
         qs_pieces = models.ABCTunePiece.objects.filter(
-            abc_tune__tune__pk = abctune.pk
+            abc_tune__pk = abctune.pk
         )
         # Build ABCPart Piece to Add
         for abc_part in qs_pieces:
             abc_text_full += abc_part.abc_piece + "\n"
 
-    return title + "\n" + bpm + "\n" + abc_text_full
+    abc_text_full = bpm + "\n" + abc_text_full
+
+    return abc_text_full, titles

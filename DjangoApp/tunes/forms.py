@@ -7,7 +7,6 @@ class PullCombineABCForm(forms.Form):
         ("1", 1),
         ("2", 2),
         ("3", 3),
-        ("4", 4),
     ]
     tune_type_choice = [
         ("reel", "reel"),

@@ -149,14 +149,14 @@ class Test:
     
     def test_combine_abc(self, setup_data):
         qs = tunes_combine.pull_tunes(num=3, tune_type="reel")
-        abc_text = tunes_combine.combine_abc(qs)
+        abc_text, title = tunes_combine.combine_abc(qs)
 
         assert "P: Tune 1\nK: G Major\nM: 4/4\n|abcd|\n|efgA|\n" in abc_text, "abctune1 piece 1 and 2 in abc_text output"
         assert "P: Tune 2\nK: G Major\nM: 4/4\n|ABCD|\n|EFGa|\n" in abc_text, "abctune2 piece 1 and 2 in abc_text output"
         assert "P: Tune 3\nK: G Major\nM: 4/4\n|aaaa|\n|bbbb|\n" in abc_text, "abctune2 piece 1 and 2 in abc_text output"
 
         qs = tunes_combine.pull_tunes(num=2, tune_type="jig")
-        abc_text = tunes_combine.combine_abc(qs)
+        abc_text, title = tunes_combine.combine_abc(qs)
 
         assert "P: Tune 4\nK: G Major\nM: 6/8\n|aaa aaa|\n|bbb bbb|\n" in abc_text, "abctune4 piece 1 and 2 in abc_text output"
         assert "P: Tune 5\nK: G Major\nM: 6/8\n|ccc ccc|\n|ddd ddd|\n" in abc_text, "abctune5 piece 1 and 2 in abc_text output"
