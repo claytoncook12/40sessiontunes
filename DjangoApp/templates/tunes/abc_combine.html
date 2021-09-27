@@ -47,15 +47,14 @@
 <h1>Combine Tune</h1>
 <hr>
 
-<!-- TODO Need Form For Selecting Tunes -->
-<h2>Need Form For Selecting Types</h2>
-<p>Number of tunes: {{num}}</p>
-<p>Tune Type: {{ tune_type }}</p>
-<hr>
+<!-- Form For Selecting Tunes -->
+<form method="GET" action="{% url  'tunes:abc_combine' %}">
+    {{ form.as_p }}
+    <p><input type="submit" value="Generate Tunes"></p>
+</form>
 
 <h2>Combined ABC</h2>
-{% if abc_combined %}
-    {% for abc in abc_list %}
+    {% if abc %}
         <!-- divs for abc paper and audio -->
         <div id="paper"></div>
         <div id="audio"></div>
@@ -66,14 +65,11 @@
                 id="audio"
                 class="midi"
         -->
-        {% include "tunes/subtemplates/render_abc_audio_midi.html" %}  
+        {% include "tunes/subtemplates/render_abc_audio_midi.html" with abc_text=abc %}
         <br>
-        
+
         <h4>ABC notation</h4>
-        <p style="white-space: pre-wrap;">{{ abc.abc_full_default|safe }}</p>
+        <p style="white-space: pre-wrap;">{{ abc|safe }}</p>
         <br>
-    {% endfor %}
-{% else %}
-    <p>No Tunes Queried Yet.</p>
-{% endif %}
+    {% endif %}
 {% endblock %}

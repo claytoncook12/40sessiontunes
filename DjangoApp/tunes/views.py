@@ -2,6 +2,8 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from .models import Tune, ABCTune
+from .forms import PullCombineABCForm
+from .tunes_combine import pull_tunes, combine_abc
 
 
 # Create your views here.
@@ -29,12 +31,26 @@ def detail(request, id):
 
 def abc_combine(request):
 
-    if request.method == "POST":
-        return render(request, 'tunes/abc_combine.html')
-    else:
-        context = {
-            "num": request.GET.get('num'),
-            "tune_type": request.GET.get('tune_type'),
-        }
+    if request.method == "GET":
+        if 'num' in request.GET:
+            if 'tune_type' in request.GET:
+                form = PullCombineABCForm(request.GET)
+                if form.is_valid():
+                    abc = combine_abc(
+                        pull_tunes(
+                            num=int(form.cleaned_data['num']),
+                            tune_type=form.cleaned_data['tune_type']
+                        )
+                    )
 
-    return render(request, 'tunes/abc_combine.html', context)
+                    context = {
+                        'form': form,
+                        'abc': abc,
+                    }
+
+                    return render(request, 'tunes/abc_combine.html', context)
+
+        else:
+            form = PullCombineABCForm()
+
+    return render(request, 'tunes/abc_combine.html', {'form': form})

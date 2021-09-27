@@ -60,7 +60,7 @@
              id="audio"
              class="midi"
         -->
-        {% include "tunes/subtemplates/render_abc_audio_midi.html" %}  
+        {% include "tunes/subtemplates/render_abc_audio_midi.html" with abc_text=abc.abc_full_default_bpm %} 
 
         <!-- Show raw abc notation -->
         <h4>ABC notation</h4>

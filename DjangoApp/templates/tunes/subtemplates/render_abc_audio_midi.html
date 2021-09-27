@@ -1,5 +1,5 @@
 <!-- Scripts for making notes and audio -->
-<!-- {{ abc.abc_full_default_bpm|safe }} is what gets generated -->
+<!-- {{ abc_text|safe }} is what gets generated -->
 
 <script type="text/javascript">
     // given that there are two elements in the DOM with the IDs "paper" and "audio"
@@ -51,7 +51,7 @@
     
     var cursorControl = new CursorControl(); // see section on CursorControl
     // Variable abc controls the abc that is displayed
-    var abc = `{{ abc.abc_full_default_bpm|safe }}`;
+    var abc = `{{ abc_text|safe }}`;
     var abcOptions = { add_classes: true };
     var audioParams = {
         chordsOff: true,
