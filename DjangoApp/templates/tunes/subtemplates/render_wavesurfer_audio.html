@@ -34,8 +34,14 @@
                     // Minimum markers to show that they are there
                     markers: [
                         {
-                            time: 0.0,
-                            label: "Example Label",
+                            time: {{ audio.buffer_end_time }}/1000,
+                            label: "Count In",
+                            color: themeColor,
+                            position: 'top'
+                        },
+                        {
+                            time: {{ audio.countin_end_time }}/1000,
+                            label: "Start Tune",
                             color: themeColor,
                             position: 'top'
                         },
@@ -93,5 +99,5 @@
     }, false);
 
     // Load the audio file from the domain
-    Spectrum.load("{{ audio }}");
+    Spectrum.load("{{ audio.audio_file.url }}");
 </script>
