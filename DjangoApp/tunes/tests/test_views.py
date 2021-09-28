@@ -22,12 +22,12 @@ class TestDetailView:
     def test_shows_name(self):
         client = Client()
         
-        # Create Tune and Get Id
+        # Create Tune and Get pk
         tune = factories.TuneFactory()
-        id  = tune.id
+        pk  = tune.pk
 
         # Get detail view of tune created above
-        response = client.get(reverse("tunes:detail", args=(id,)))
+        response = client.get(reverse("tunes:detail", args=(pk,)))
 
         assert response.status_code == 200, "View returns 200 status code"
         assert tune.name in response.content.decode(), "The tunes.detail view shows the tune.name"
@@ -138,3 +138,25 @@ class TestABCCombineView:
 
         assert response.status_code == 200, "View returns 200 status code"
         assert tune1.name in response.content.decode(), "Test that tune1.name in view"
+
+@pytest.mark.django_db
+class TestDetailAudioRef:
+    def test_shows_audio_properties(self):
+        """
+        Shows important audio properties for reference
+        recording detail view
+        """
+        client = Client()
+
+        # Create reference audio file
+        ref = factories.ReferenceAudioFactory()
+        pk = ref.pk
+
+        # Get detail view of tune created above
+        response = client.get(reverse("tunes:detail_audio_ref", args=(pk,)))
+
+        assert response.status_code == 200, "View return 200 status code"
+        assert ref.title.title() in response.content.decode(), "title shows in the detail audio reference view"
+
+
+

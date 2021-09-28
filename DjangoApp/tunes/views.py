@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
-from .models import Tune, ABCTune
+from .models import Tune, ABCTune, ReferenceAudio
 from .forms import PullCombineABCForm
 from .tunes_combine import pull_tunes, combine_abc
 
@@ -17,9 +17,9 @@ def list(request):
 
     return render(request, 'tunes/list.html', context)
 
-def detail(request, id):
+def detail(request, pk):
 
-    tune = get_object_or_404(Tune, pk=id)
+    tune = get_object_or_404(Tune, pk=pk)
     abc_qs = ABCTune.objects.filter(tune=tune)
 
     context = {
@@ -55,3 +55,13 @@ def abc_combine(request):
             form = PullCombineABCForm()
 
     return render(request, 'tunes/abc_combine.html', {'form': form})
+
+def detail_audio_ref(request, pk):
+
+    audio_ref = get_object_or_404(ReferenceAudio, pk=pk)
+
+    context = {
+        'audio_ref': audio_ref,
+    }
+
+    return render(request, 'tunes/detail_audio_ref.html', context)

@@ -59,7 +59,7 @@ class Tune(models.Model):
         return  f'{self.name} ({self.tune_type.tune_type_char})'
     
     def get_absolute_url(self):
-        return reverse('tunes:detail', kwargs={"id": self.id})
+        return reverse('tunes:detail', kwargs={"pk": self.pk})
     
     def first_two_bars(self):
         return ABCTune.objects.get(tune=self).abc_piece_and_bars(1, 2)
@@ -215,6 +215,11 @@ class ReferenceAudio(models.Model):
                f" {self.parts} parts, {self.repeats} repeats, {self.bpm.bpm} BPM"
     
     @property
+    def title(self):
+        return f"{self.tune_type.tune_type_char}: " \
+               f"{self.parts} parts, {self.repeats} repeats, {self.bpm.bpm} BPM"
+    
+    @property
     def audio_file_length_milliseconds_round(self):
         """
         Uses pydub to read in mp3 file from database 
@@ -222,3 +227,6 @@ class ReferenceAudio(models.Model):
         to the nearest millisecond
         """
         return round(AudioSegment.from_mp3(self.audio_file).duration_seconds*1000)
+    
+    def get_absolute_url(self):
+        return reverse('tunes:detail_audio_ref', kwargs={"pk": self.pk})
