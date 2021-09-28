@@ -201,7 +201,7 @@ class ReferenceAudio(models.Model):
     beats_countin = models.IntegerField("number of count-in beats at beginning of reference recording")
     beats_ending = models.IntegerField("number of beats at end of reference recording")
     beats_per_part = models.IntegerField("number of beats per part")
-    audio_file = models.FileField(upload_to="/ReferenceAudio", verbose_name="Reference Audio MP3 file")
+    audio_file = models.FileField(upload_to="ReferenceAudio/", verbose_name="Reference Audio MP3 file")
     description = models.TextField("description of reference audio", null=True, blank=True)
 
     def clean(self, *args, **kwargs):
