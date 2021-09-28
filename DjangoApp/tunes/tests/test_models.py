@@ -185,6 +185,10 @@ class TestReferenceAudio:
         obj = factories.ReferenceAudioFactory()
         assert str(obj) == "Ref Audio: reel, 2 parts, 3 repeats, 1/4=120 BPM", "Check obj string"
     
+    def test_get_absolute_url(self):
+        obj = factories.ReferenceAudioFactory()
+        assert "/tunes/ref/1" == obj.get_absolute_url()
+    
     def test_init(self):
         obj = factories.ReferenceAudioFactory()
         assert obj.pk == 1, "Should save an instance"
