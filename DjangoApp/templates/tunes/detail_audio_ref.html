@@ -7,4 +7,8 @@
 
 {% include "tunes/subtemplates/render_wavesurfer_audio.html" with audio=audio_ref.audio_file.url  %}
 
+<br>
+<br>
+<a href="{{ audio_ref.audio_file.url }}" download="">Download Audio</a>
+
 {% endblock %}
