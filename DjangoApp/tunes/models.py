@@ -1,12 +1,13 @@
 from django.conf import settings
 from django.db import models
 from django.urls import reverse
-
 from django.core.exceptions import ValidationError
 
 from pathlib import Path
 
 from pydub import AudioSegment
+
+from tunes.utils_audio import bpm_beats_to_milliseconds
 
 class WrongFileType(Exception):
     pass
@@ -46,6 +47,10 @@ class BPM(models.Model):
 
     def __str__(self):
         return f'BPM: {self.bpm}'
+    
+    @property
+    def bpm_value(self):
+        return int(self.bpm.split("=")[-1])
 
 class Tune(models.Model):
     name = models.CharField('Tune Name', max_length=300)
@@ -226,6 +231,24 @@ class ReferenceAudio(models.Model):
         to the nearest millisecond
         """
         return round(AudioSegment.from_mp3(self.audio_file).duration_seconds*1000)
+    
+    @property
+    def buffer_end_time(self):
+        """
+        Returns time in milliseconds of buffer
+        based on bpm and beats
+        """
+    
+        return bpm_beats_to_milliseconds(self.bpm.bpm_value,self.beats_buffer)
+    
+    @property
+    def countin_end_time(self):
+        """
+        Returns time in milliseconds of
+        buffer and coutin together
+        """
+
+        return self.buffer_end_time + bpm_beats_to_milliseconds(self.bpm.bpm_value, self.beats_countin)
     
     def get_absolute_url(self):
         return reverse('tunes:detail_audio_ref', kwargs={"pk": self.pk})

@@ -34,6 +34,10 @@ class TestBPM:
     def test_str(self):
         obj = factories.BPMFactory()
         assert str(obj) == "BPM: 1/4=120", "Check __str__ method"
+    
+    def test_bpm_value(self):
+        obj = factories.BPMFactory(bpm="1/4=120")
+        assert obj.bpm_value == 120
 
 @pytest.mark.django_db
 class TestTune:
@@ -198,3 +202,28 @@ class TestReferenceAudio:
                 audio_file = str(Path(settings.MEDIA_ROOT) / "fixtures" / "tunes" / "referenceaudio" / "test.wav")
             )
             obj.clean(), "Should raise error on clean due to file type not being .mp3"
+    
+    def test_buffer_end_time(self):
+        obj1 = factories.ReferenceAudioFactory()
+        assert obj1.buffer_end_time == 4000.00, "BPM 120 and beats_buffer is 8, so 4000 milliseconds"
+
+        obj2 = factories.ReferenceAudioFactory(
+            beats_buffer = 0,
+            bpm = factories.BPMFactory(
+                bpm = "1/8=60"
+            )
+        )
+        assert obj2.buffer_end_time == 0, "BPM 60 and beats buffer is 0, so 0 milliseconds"
+    
+    def test_countin_end_time(self):
+        obj1 = factories.ReferenceAudioFactory()
+        assert obj1.countin_end_time == 8000, "BPM 120 and beats_buffer is 8, beats_countin is 8, so 8000 milliseconds"
+
+        obj2 = factories.ReferenceAudioFactory(
+            beats_buffer = 0,
+            beats_countin = 0,
+            bpm = factories.BPMFactory(
+                bpm = "1/8=60"
+            )
+        )
+        assert obj2.countin_end_time == 0, "BPM 120 and beats_buffer is 0, beats_countin is 0, so 8000 milliseconds"
