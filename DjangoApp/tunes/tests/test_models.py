@@ -227,3 +227,14 @@ class TestReferenceAudio:
             )
         )
         assert obj2.countin_end_time == 0, "BPM 120 and beats_buffer is 0, beats_countin is 0, so 8000 milliseconds"
+    
+    def test_get_start_firstpart_xtime(self):
+        obj = factories.ReferenceAudioFactory()
+
+        first_time = obj.get_start_firstpart_xtime(1)
+        second_time = obj.get_start_firstpart_xtime(2)
+        third_time = obj.get_start_firstpart_xtime(3)
+
+        assert first_time == 8000, "Start of first time through tune"
+        assert second_time == 24000, "Start of second time through tune"
+        assert third_time == 40000, "Start of third time through tune"

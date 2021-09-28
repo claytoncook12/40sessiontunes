@@ -250,5 +250,24 @@ class ReferenceAudio(models.Model):
 
         return self.buffer_end_time + bpm_beats_to_milliseconds(self.bpm.bpm_value, self.beats_countin)
     
+    def get_start_firstpart_xtime(self, played_num):
+        """
+        Calculates start of xpart xtime through
+        in milliseconds
+
+        Parameters
+        ----------
+            played_num (int): time the tune has been played
+        """
+        total_beats_start = self.beats_buffer + self.beats_countin
+        
+        if played_num == 1:
+            start_milliseconds = bpm_beats_to_milliseconds(self.bpm.bpm_value, total_beats_start)
+        else:
+            start_milliseconds = bpm_beats_to_milliseconds(self.bpm.bpm_value, total_beats_start) + \
+                    (played_num - 1) * self.parts * bpm_beats_to_milliseconds(self.bpm.bpm_value, self.beats_per_part)
+
+        return start_milliseconds
+    
     def get_absolute_url(self):
         return reverse('tunes:detail_audio_ref', kwargs={"pk": self.pk})
