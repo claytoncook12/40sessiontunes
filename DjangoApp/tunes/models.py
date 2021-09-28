@@ -212,7 +212,7 @@ class ReferenceAudio(models.Model):
     def clean(self, *args, **kwargs):
         super().clean()
         if Path(self.audio_file.path).suffix != ".mp3":
-            raise ValidationError('Reference Audio MP3 file be .mp3')
+            raise ValidationError('Reference Audio MP3 file must be .mp3')
 
     def __str__(self):
         return f"Ref Audio: {self.tune_type.tune_type_char}," \
